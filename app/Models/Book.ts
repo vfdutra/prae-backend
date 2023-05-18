@@ -25,4 +25,9 @@ export default class Book extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @hasOne(() => Interest, {
+    foreignKey: 'book_id',
+  })
+  public player: HasOne<typeof Interest>
 }

@@ -24,6 +24,9 @@ Route.get('/', async () => {
   return { hello: 'world' }
 })
 
+Route.post('/login', 'SessionsController.store').as('sessions.store')
+Route.get('/logout', 'SessionsController.destroy').as('sessions.destroy')
+
 // Rotas de Livros
 Route.resource('books', 'BooksController').as('books')
 
