@@ -31,4 +31,9 @@ export default class BooksController {
         const book = await Book.findByOrFail('id', request.param('id'))
         return response.ok({book})
     }
+    
+    public async showAll ({ response }: HttpContextContract){
+        const books = await Book.all()
+        return response.ok({books})
+    }
 }

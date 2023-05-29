@@ -25,10 +25,19 @@ Route.get('/', async () => {
 })
 
 // Rotas de Livros
-Route.resource('books', 'BooksController').as('books')
+Route.group(() => {
+    Route.get('/', 'BooksController.showAll')
+    Route.get('/:id', 'BooksController.show')
+    Route.post('/', 'BooksController.create')
+    Route.put('/:id', 'BooksController.update')
+    Route.delete('/:id', 'BooksController.destroy')
+}).prefix('books')
+
 
 // Rotas de Usuários
 Route.resource('users', 'UsersController').as('users')
 
 // Rotas de Interesses
 Route.resource('interests', 'InterestsController').as('interests')
+
+Route.post('insert', 'CsvsController.import')
