@@ -29,18 +29,28 @@ Route.get('/logout', 'SessionsController.destroy').as('sessions.destroy')
 
 // Rotas de Livros
 Route.group(() => {
-    Route.get('/', 'BooksController.showAll')
-    Route.get('/:id', 'BooksController.show')
+    Route.get('/all', 'BooksController.findAll')
+    Route.get('/:id', 'BooksController.findOne')
     Route.post('/', 'BooksController.create')
     Route.put('/:id', 'BooksController.update')
     Route.delete('/:id', 'BooksController.destroy')
 }).prefix('books')
 
-
 // Rotas de Usuários
-Route.resource('users', 'UsersController').as('users')
+Route.group(() => {
+    Route.get('/all', 'UsersController.findAll')
+    Route.get('/:id', 'UsersController.findOne')
+    Route.post('/', 'UsersController.create')
+    Route.put('/:id', 'UsersController.update')
+    Route.delete('/:id', 'UsersController.destroy')
+}).prefix('users')
 
 // Rotas de Interesses
-Route.resource('interests', 'InterestsController').as('interests')
+Route.group(() => {
+    Route.get('/', 'InterestsController.showAll')
+    Route.get('/:id', 'InterestsController.show')
+    Route.post('/', 'InterestsController.create')
+    Route.put('/:id', 'InterestsController.update')
+}).prefix('interests')
 
 Route.post('insert', 'CsvsController.import')
