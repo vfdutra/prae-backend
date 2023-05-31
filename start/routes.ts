@@ -25,7 +25,6 @@ Route.get('/', async () => {
 })
 
 Route.post('/login', 'SessionsController.store').as('sessions.store')
-Route.get('/logout', 'SessionsController.destroy').as('sessions.destroy')
 
 // Rotas de Livros
 Route.group(() => {
@@ -53,4 +52,4 @@ Route.group(() => {
     Route.put('/:id', 'InterestsController.update')
 }).prefix('interests')
 
-Route.post('insert', 'CsvsController.import')
+// Route.post('insert', 'CsvsController.import')
