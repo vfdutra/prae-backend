@@ -46,10 +46,11 @@ Route.group(() => {
 
 // Rotas de Interesses
 Route.group(() => {
-    Route.get('/', 'InterestsController.showAll')
-    Route.get('/:id', 'InterestsController.show')
-    Route.post('/', 'InterestsController.create')
+    Route.get('/all', 'InterestsController.findAll')
+    Route.get('/:id', 'InterestsController.findOne')
+    Route.post('/', 'InterestsController.create')    
     Route.put('/:id', 'InterestsController.update')
+    Route.delete('/:id', 'InterestsController.destroy')
 }).prefix('interests')
 
 // Route.post('insert', 'CsvsController.import')
