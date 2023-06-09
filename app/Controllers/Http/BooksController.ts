@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Database from '@ioc:Adonis/Lucid/Database'
 import Book from 'App/Models/Book'
 //import Interest from 'App/Models/Interest'
 
@@ -8,8 +9,30 @@ export default class BooksController {
     }
 
     public async create ({ response, request }: HttpContextContract) {
-        const bookPayload = request.only(['title', 'author', 'cover', 'category', 'quantity'])
-        const book = await Book.create(bookPayload)
+        const bookPayload = request.only(['title', 'author', 'category', 'quantity'])
+
+        const imagem = request.file('cover', {
+            size: '2mb',
+            extnames: ['jpg', 'png', 'jpeg'],            
+        });
+
+        await imagem.move(`public/uploads`)              
+
+        const imagemData = {
+            path: `uploads/${imagem.fileName}`,
+        }     
+
+        const book = await Database
+                .insertQuery()
+                .table('books')
+                .insert({
+                    title: bookPayload.title,
+                    author: bookPayload.author,
+                    cover: imagemData.path,
+                    category: bookPayload.category,
+                    quantity: bookPayload.quantity,
+                })
+
         return response.created(book)
     }
 
