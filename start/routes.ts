@@ -20,6 +20,8 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
+Route.get('/showImage/:file', 'FilesController.show')
+
 Route.get('/', async () => {
   return { hello: 'world' }
 })
