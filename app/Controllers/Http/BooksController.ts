@@ -11,29 +11,29 @@ export default class BooksController {
     public async create ({ response, request }: HttpContextContract) {
         const bookPayload = request.only(['title', 'author', 'category', 'quantity'])
 
-        const imagem = request.file('cover', {
-            size: '2mb',
-            extnames: ['jpg', 'png', 'jpeg'],            
-        });
+        // const imagem = request.file('cover', {
+        //     size: '2mb',
+        //     extnames: ['jpg', 'png', 'jpeg'],            
+        // });
 
-        await imagem.move(`public/uploads`)              
+        // await imagem.move(`public/uploads`)              
 
-        const imagemData = {
-            path: `uploads/${imagem.fileName}`,
-        }     
+        // const imagemData = {
+        //     path: `uploads/${imagem.fileName}`,
+        // }     
 
-        const book = await Database
+        await Database
                 .insertQuery()
                 .table('books')
                 .insert({
                     title: bookPayload.title,
                     author: bookPayload.author,
-                    cover: imagemData.path,
+                    // cover: imagemData.path,
                     category: bookPayload.category,
                     quantity: bookPayload.quantity,
                 })
 
-        return response.created(book)
+        return response.created({message: 'Book created'})
     }
 
     public async update ({ request, response }: HttpContextContract){
