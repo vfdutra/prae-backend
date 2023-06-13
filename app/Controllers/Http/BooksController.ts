@@ -38,15 +38,37 @@ export default class BooksController {
 
     public async update ({ request, response }: HttpContextContract){
         const book = await Book.findByOrFail('id', request.param('id'))
-        const bookPayload = request.only(['title', 'author', 'cover', 'category', 'quantity'])
+        const bookPayload = request.only(['title', 'author', 'category', 'quantity'])
+
+        const image = request.file('cover', {
+            size: '2mb',
+            extnames: ['jpg', 'png', 'jpeg'],
+        });
+
+        if(image){
+            await image.move(`public/uploads`)
+            const imageData = {
+                path: `${image.fileName}`,
+            }            
+            bookPayload.cover = imageData.path
+        }
 
         if(!book){
             return response.notFound({message: 'Book not found'})
-        }
+        }       
 
-        book.merge(bookPayload)
-        await book.save()
-        return response.ok({book})
+        await Database
+                .from('books')
+                .update({
+                    title: bookPayload.title? bookPayload.title : book.title,
+                    author: bookPayload.author? bookPayload.author : book.author,
+                    cover: bookPayload.cover? bookPayload.cover : book.cover,
+                    category: bookPayload.category? bookPayload.category : book.category,
+                    quantity: bookPayload.quantity? bookPayload.quantity : book.quantity,                    
+                }) 
+                .where('id', request.param('id'))                   
+
+        return response.ok({book: await Book.findByOrFail('id', request.param('id'))})
     }
 
     public async destroy ({ request, response }: HttpContextContract){
