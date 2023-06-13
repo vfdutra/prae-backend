@@ -8,7 +8,7 @@ export default class BooksController {
         return response.ok({message: 'Books Controller'})
     }
 
-    public async create ({ response, request }: HttpContextContract) {
+    public async create ({ response, request }: HttpContextContract) {      
         const bookPayload = request.only(['title', 'author', 'category', 'quantity'])
 
         const imagem = request.file('cover', {
@@ -16,19 +16,23 @@ export default class BooksController {
             extnames: ['jpg', 'png', 'jpeg'],            
         });
 
-        await imagem.move(`public/uploads`)              
+        if(imagem){
+            await imagem.move(`public/uploads`)         
+        
+            const imagemData = {
+                path: `${imagem.fileName}`,
+                }     
 
-        const imagemData = {
-            path: `${imagem.fileName}`,
-        }     
-
+            bookPayload.cover = imageData.path
+        }   
+        
         await Database
                 .insertQuery()
                 .table('books')
                 .insert({
                     title: bookPayload.title,
                     author: bookPayload.author,
-                    cover: imagemData.path,
+                    cover: bookPayload.cover,
                     category: bookPayload.category,
                     quantity: bookPayload.quantity,
                 })
