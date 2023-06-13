@@ -21,7 +21,7 @@ export default class BooksController {
             const imagemData = {
                 path: `${imagem.fileName}`,
             }     
-            bookPayload.cover = imageData.path
+            bookPayload.cover = imagemData.path
         }   
         
         await Database
