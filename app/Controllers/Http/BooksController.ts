@@ -9,7 +9,7 @@ export default class BooksController {
     }
 
     public async create ({ response, request }: HttpContextContract) {      
-        const bookPayload = request.only(['title', 'author', 'category', 'quantity'])
+        const bookPayload = request.only(['title', 'cover', 'author', 'category', 'quantity'])
 
         const imagem = request.file('cover', {
             size: '2mb',
@@ -17,12 +17,10 @@ export default class BooksController {
         });
 
         if(imagem){
-            await imagem.move(`public/uploads`)         
-        
+            await imagem.move(`public/uploads`)                 
             const imagemData = {
                 path: `${imagem.fileName}`,
-                }     
-
+            }     
             bookPayload.cover = imageData.path
         }   
         
@@ -42,7 +40,7 @@ export default class BooksController {
 
     public async update ({ request, response }: HttpContextContract){
         const book = await Book.findByOrFail('id', request.param('id'))
-        const bookPayload = request.only(['title', 'author', 'category', 'quantity'])
+        const bookPayload = request.only(['title', 'cover', 'author', 'category', 'quantity'])
 
         const image = request.file('cover', {
             size: '2mb',
