@@ -12,6 +12,9 @@ export default class Interest extends BaseModel {
   @column()
   public book_id: number
 
+  @column()
+  public status: number
+
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
 

@@ -53,6 +53,8 @@ Route.group(() => {
     Route.post('/', 'InterestsController.create')    
     Route.put('/:id', 'InterestsController.update')
     Route.delete('/:id', 'InterestsController.destroy')
+    Route.get('/user/:id', 'InterestsController.findByUser')
+    Route.get('/book/:id', 'InterestsController.findByBook')
 }).prefix('interests')
 
 // Route.post('insert', 'CsvsController.import')

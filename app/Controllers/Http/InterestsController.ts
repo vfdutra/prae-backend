@@ -4,11 +4,11 @@ import User from 'App/Models/User'
 import Book from 'App/Models/Book'
 
 export default class InterestsController {
-    public async store ({ request, response }: HttpContextContract) {
-        const { user_id, book_id } = request.all()
+    public async create ({ request, response }: HttpContextContract) {
+        const { user_id, book_id, status } = request.all()
         const user = await User.findOrFail(user_id)
         const book = await Book.findOrFail(book_id)
-        const interest = await Interest.create({ user_id: user.id, book_id: book.id })
+        const interest = await Interest.create({ user_id: user.id, book_id: book.id, status })
         return response.created({ interest })
     }   
 
@@ -36,5 +36,17 @@ export default class InterestsController {
     public async findOne ({ params, response }: HttpContextContract) {
         const interest = await Interest.findOrFail(params.id)
         return response.ok({ interest })
+    }
+
+    public async findByUser ({ params, response }: HttpContextContract) {
+        const user = await User.findOrFail(params.id)
+        const interests = await user.related('interests').query()
+        return response.ok({ interests })
+    }
+
+    public async findByBook ({ params, response }: HttpContextContract) {
+        const book = await Book.findOrFail(params.id)
+        const interests = await book.related('interests').query()
+        return response.ok({ interests })
     }
 }

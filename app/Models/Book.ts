@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 import Interest from './Interest'
 
 export default class Book extends BaseModel {
@@ -27,8 +27,8 @@ export default class Book extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @hasOne(() => Interest, {
+  @hasMany(() => Interest, {
     foreignKey: 'book_id',
   })
-  public player: HasOne<typeof Interest>
+  public interests: HasMany<typeof Interest>
 }
