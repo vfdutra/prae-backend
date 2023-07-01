@@ -8,8 +8,15 @@ export default class InterestsController {
         const { user_id, book_id, status } = request.all()
         const user = await User.findOrFail(user_id)
         const book = await Book.findOrFail(book_id)
-        const interest = await Interest.create({ user_id: user.id, book_id: book.id, status })
-        return response.created({ interest })
+
+        const interestExists = await Interest.query().where('book_id', book.id).first()
+
+        if (interestExists) {
+            return response.badRequest({ error: 'This book already has an interest' })
+        } else {            
+            const interest = await Interest.create({ user_id: user.id, book_id: book.id, status })
+            return response.created({ interest })
+        }
     }   
 
     public async update ({ params, request, response }: HttpContextContract) {
