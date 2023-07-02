@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Database from '@ioc:Adonis/Lucid/Database'
 import Book from 'App/Models/Book'
+import fs from 'fs/promises'
 //import Interest from 'App/Models/Interest'
 
 export default class BooksController {
@@ -8,52 +9,47 @@ export default class BooksController {
         return response.ok({message: 'Books Controller'})
     }
 
-    public async create ({ response, request }: HttpContextContract) {      
-        const bookPayload = request.only(['title', 'cover', 'author', 'category', 'quantity'])
-
-        const imagem = request.file('cover', {
-            size: '2mb',
-            extnames: ['jpg', 'png', 'jpeg'],            
-        });
-
-        if(imagem){
-            await imagem.move(`public/uploads`)                 
-            const imagemData = {
-                path: `${imagem.fileName}`,
-            }     
-            bookPayload.cover = imagemData.path
-        }   
-        
-        await Database
-                .insertQuery()
-                .table('books')
-                .insert({
-                    title: bookPayload.title,
-                    author: bookPayload.author,
-                    cover: bookPayload.cover,
-                    category: bookPayload.category,
-                    quantity: bookPayload.quantity,
-                })
-
-        return response.created({ Book: await Book.query().orderBy('id', 'desc').first()})
-    }
+    public async create({ response, request }: HttpContextContract) {
+      const bookPayload = request.only(['title', 'cover', 'author', 'category', 'quantity']);
+    
+      const imagem = request.file('cover', {
+        size: '2mb',
+        extnames: ['jpg', 'png', 'jpeg'],
+      });
+    
+      if (imagem) {
+        const tmpPath = imagem.tmpPath!;
+        const imageData = await fs.readFile(tmpPath);
+        const hexString = '\\x' + imageData.toString('hex');
+        bookPayload.cover = hexString;
+      }
+    
+      await Database.insertQuery().table('books').insert({
+        title: bookPayload.title,
+        author: bookPayload.author,
+        cover: bookPayload.cover,
+        category: bookPayload.category,
+        quantity: bookPayload.quantity,
+      });
+    
+      return response.created({ Book: await Book.query().orderBy('id', 'desc').first() });
+    }    
 
     public async update ({ request, response }: HttpContextContract){
         const book = await Book.findByOrFail('id', request.param('id'))
         const bookPayload = request.only(['title', 'cover', 'author', 'category', 'quantity'])
 
-        const image = request.file('cover', {
+        const imagem = request.file('cover', {
             size: '2mb',
             extnames: ['jpg', 'png', 'jpeg'],
         });
 
-        if(image){
-            await image.move(`public/uploads`)
-            const imageData = {
-                path: `${image.fileName}`,
-            }            
-            bookPayload.cover = imageData.path
-        }
+        if (imagem) {
+            const tmpPath = imagem.tmpPath!;
+            const imageData = await fs.readFile(tmpPath);
+            const hexString = '\\x' + imageData.toString('hex');
+            bookPayload.cover = hexString;
+          }
 
         if(!book){
             return response.notFound({message: 'Book not found'})
