@@ -45,8 +45,8 @@ const corsConfig: CorsConfig = {
   |
   */
   origin: [
-    'http://192.168.0.115:3000',
-    'http://localhost:3000',
+     'http://localhost:3000',
+     'https://prae-henriquerl55.vercel.app/'
   ],
 
   /*
