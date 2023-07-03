@@ -2,6 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Database from '@ioc:Adonis/Lucid/Database'
 import Book from 'App/Models/Book'
 import fs from 'fs/promises'
+import sharp from 'sharp'
 //import Interest from 'App/Models/Interest'
 
 export default class BooksController {
@@ -20,7 +21,10 @@ export default class BooksController {
       if (imagem) {
         const tmpPath = imagem.tmpPath!;
         const imageData = await fs.readFile(tmpPath);
-        const hexString = '\\x' + imageData.toString('hex');
+        const resizedImageData = await sharp(imageData)
+        .resize(200, 300) // Largura e altura desejadas
+        .toBuffer();
+        const hexString = '\\x' + resizedImageData.toString('hex');
         bookPayload.cover = hexString;
       }
     
@@ -47,7 +51,10 @@ export default class BooksController {
         if (imagem) {
             const tmpPath = imagem.tmpPath!;
             const imageData = await fs.readFile(tmpPath);
-            const hexString = '\\x' + imageData.toString('hex');
+            const resizedImageData = await sharp(imageData)
+            .resize(200, 300) // Largura e altura desejadas
+            .toBuffer();
+            const hexString = '\\x' + resizedImageData.toString('hex');
             bookPayload.cover = hexString;
           }
 

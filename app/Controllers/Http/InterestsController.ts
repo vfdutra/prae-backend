@@ -21,10 +21,8 @@ export default class InterestsController {
 
     public async update ({ params, request, response }: HttpContextContract) {
         const interest = await Interest.findOrFail(params.id)
-        const { user_id, book_id } = request.all()
-        const user = await User.findOrFail(user_id)
-        const book = await Book.findOrFail(book_id)
-        interest.merge({ user_id: user.id, book_id: book.id })
+        const status = request.only(['status'])
+        interest.status = status.status        
         await interest.save()
         return response.ok({ interest })
     }
