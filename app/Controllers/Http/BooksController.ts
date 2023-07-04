@@ -31,7 +31,7 @@ export default class BooksController {
       await Database.insertQuery().table('books').insert({
         title: bookPayload.title,
         author: bookPayload.author,
-        cover: bookPayload.cover,
+        cover: bookPayload.cover ? bookPayload.cover : null,
         category: bookPayload.category,
         quantity: bookPayload.quantity,
       });
