@@ -1,6 +1,9 @@
 {
   "name": "prae-backend",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "private": true,
   "scripts": {
     "dev": "node ace serve --watch",
