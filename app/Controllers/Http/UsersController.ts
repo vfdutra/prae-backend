@@ -12,10 +12,6 @@ export default class UsersController {
         
         const user = await User.create(userPayload)
 
-        if(userPayload.type == 3){
-            await user.related('player').create({})
-        }
-
         return response.created({user})
     }
 
