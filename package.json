@@ -2,8 +2,8 @@
   "name": "prae-backend",
   "version": "1.0.0",
   "engines": {
-    "node": ">=18.x",
-    "npm": ">=7.x"
+    "node": ">=18.16.1",
+    "npm": ">=9.7.1"
   },
   "private": true,
   "scripts": {
