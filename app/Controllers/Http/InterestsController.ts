@@ -36,9 +36,9 @@ export default class InterestsController {
             const interests = await Database.query().select('*').from('interests').where('book_id', book.id).andWhere('status', 0)
 
             if(book.quantity == 0){
-                interests.forEach(async (index) => {
-                    index.status = 5
-                    await index.save()
+                interests.forEach(async (interest) => {
+                    interest.status = 5
+                    await Database.from('interests').where('id', interest.id).update({ status: 5 })               
                 })           
             }
         }
