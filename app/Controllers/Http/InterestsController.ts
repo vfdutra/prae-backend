@@ -35,10 +35,11 @@ export default class InterestsController {
     }
 
     public async findAll ({ response }: HttpContextContract) {
-        //Return all interets with the data of the users and the books on query builder
         const interests = await Database.query()
                                         .select('interests.id',
                                                 'interests.status',
+                                                'interests.user_id',
+                                                'interests.book_id',
                                                 'users.name as user_name', 
                                                 'books.title as book_title',
                                                 'books.author as book_author',
