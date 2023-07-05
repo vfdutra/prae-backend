@@ -10,14 +10,16 @@ export default class InterestsController {
         const user = await User.findOrFail(user_id)
         const book = await Book.findOrFail(book_id)
 
-        const interestExists = await Interest.query().where('book_id', book.id).first()
-
-        if (interestExists) {
-            return response.badRequest({ error: 'This book already has an interest' })
-        } else {            
-            const interest = await Interest.create({ user_id: user.id, book_id: book.id, status })
-            return response.created({ interest })
+        if(!user){
+            return response.badRequest({ message: 'User not found' })
         }
+
+        if(!book){
+            return response.badRequest({ message: 'Book not found' })
+        }
+
+        const interest = await Interest.create({ user_id: user.id, book_id: book.id, status })
+        return response.created({ interest })
     }   
 
     public async update ({ params, request, response }: HttpContextContract) {
@@ -25,6 +27,22 @@ export default class InterestsController {
         const status = request.only(['status'])
         interest.status = status.status        
         await interest.save()
+
+        if(status.status == 1 || status.status == 2){
+            const book = await Book.findOrFail(interest.book_id)
+            book.quantity = book.quantity - 1
+            await book.save()
+
+            const interests = await Database.query().select('*').from('interests').where('book_id', book.id).andWhere('status', 0)
+
+            if(book.quantity == 0){
+                interests.forEach(async (index) => {
+                    index.status = 5
+                    await index.save()
+                })           
+            }
+        }
+
         return response.ok({ interest })
     }
 
@@ -41,6 +59,7 @@ export default class InterestsController {
                                                 'interests.user_id',
                                                 'interests.book_id',
                                                 'users.name as user_name', 
+                                                'users.course as user_course',
                                                 'books.title as book_title',
                                                 'books.author as book_author',
                                                 'books.category as book_category',
