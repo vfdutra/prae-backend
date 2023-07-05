@@ -46,12 +46,12 @@ export default class InterestsController {
     public async findByUser ({ params, response }: HttpContextContract) {
         const user = await User.findOrFail(params.id)
         const interests = await user.related('interests').query()
-        return response.ok({ interests })
+        return response.ok({ user, interests })
     }
 
     public async findByBook ({ params, response }: HttpContextContract) {
         const book = await Book.findOrFail(params.id)
         const interests = await book.related('interests').query()
-        return response.ok({ interests })
+        return response.ok({ book, interests })
     }
 }
