@@ -26,22 +26,20 @@ export default class BooksController {
             .toBuffer();
           const hexString = '\\x' + resizedImageData.toString('hex');
           bookPayload.cover = hexString;
+        } else {
+            bookPayload.cover = null;
         }
-      
-        console.log(bookPayload.cover); // Add this line
       
         await Database.insertQuery().table('books').insert({
           title: bookPayload.title,
           author: bookPayload.author,
-          cover: bookPayload.cover ? bookPayload.cover : null,
+          cover: bookPayload.cover  ,
           category: bookPayload.category,
           quantity: bookPayload.quantity,
         });
       
-        console.log(bookPayload.cover); // Add this line
-      
-        return response.created({ Book: await Book.query().orderBy('id', 'desc').first() });
-      }      
+       return response.created({ Book: await Book.query().orderBy('id', 'desc').first() });
+    }      
 
     public async update ({ request, response }: HttpContextContract){
         const book = await Book.findByOrFail('id', request.param('id'))
