@@ -11,33 +11,37 @@ export default class BooksController {
     }
 
     public async create({ response, request }: HttpContextContract) {
-      const bookPayload = request.only(['title', 'cover', 'author', 'category', 'quantity']);
-    
-      const imagem = request.file('cover', {
-        size: '2mb',
-        extnames: ['jpg', 'png', 'jpeg'],
-      });
-    
-      if (imagem) {
-        const tmpPath = imagem.tmpPath!;
-        const imageData = await fs.readFile(tmpPath);
-        const resizedImageData = await sharp(imageData)
-        .resize(200, 300) // Largura e altura desejadas
-        .toBuffer();
-        const hexString = '\\x' + resizedImageData.toString('hex');
-        bookPayload.cover = hexString;
-      }
-    
-      await Database.insertQuery().table('books').insert({
-        title: bookPayload.title,
-        author: bookPayload.author,
-        cover: bookPayload.cover ? bookPayload.cover : null,
-        category: bookPayload.category,
-        quantity: bookPayload.quantity,
-      });
-    
-      return response.created({ Book: await Book.query().orderBy('id', 'desc').first() });
-    }    
+        const bookPayload = request.only(['title', 'cover', 'author', 'category', 'quantity']);
+      
+        const imagem = request.file('cover', {
+          size: '2mb',
+          extnames: ['jpg', 'png', 'jpeg'],
+        });
+      
+        if (imagem) {
+          const tmpPath = imagem.tmpPath!;
+          const imageData = await fs.readFile(tmpPath);
+          const resizedImageData = await sharp(imageData)
+            .resize(200, 300) // Largura e altura desejadas
+            .toBuffer();
+          const hexString = '\\x' + resizedImageData.toString('hex');
+          bookPayload.cover = hexString;
+        }
+      
+        console.log(bookPayload.cover); // Add this line
+      
+        await Database.insertQuery().table('books').insert({
+          title: bookPayload.title,
+          author: bookPayload.author,
+          cover: bookPayload.cover ? bookPayload.cover : null,
+          category: bookPayload.category,
+          quantity: bookPayload.quantity,
+        });
+      
+        console.log(bookPayload.cover); // Add this line
+      
+        return response.created({ Book: await Book.query().orderBy('id', 'desc').first() });
+      }      
 
     public async update ({ request, response }: HttpContextContract){
         const book = await Book.findByOrFail('id', request.param('id'))
