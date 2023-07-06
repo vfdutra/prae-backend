@@ -43,7 +43,7 @@ export default class BooksController {
         const book = await Book.query().orderBy('id', 'desc').first();
 
         if(interest.interestId){
-            await Database.insertQuery().table('interests_books').insert({
+            await Database.insertQuery().table('interest_books').insert({
                 interet_id: interest.interestId,
                 book_id: book?.id,                
             });
