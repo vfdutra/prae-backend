@@ -44,7 +44,7 @@ export default class BooksController {
 
         if(interest.interestId){
             await Database.insertQuery().table('interest_books').insert({
-                interet_id: interest.interestId,
+                interest_id: interest.interestId,
                 book_id: book?.id,                
             });
         }
