@@ -98,7 +98,7 @@ export default class BooksController {
     }
     
     public async findAll ({ response }: HttpContextContract){
-        const books = await Database.query().select('*').from('books').where('quantity', '>', 0)
+        const books = await Book.all()
         return response.ok({books})
     }
 }
