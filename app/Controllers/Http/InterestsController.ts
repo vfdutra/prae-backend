@@ -69,8 +69,8 @@ export default class InterestsController {
                                         .from('interests')
                                         .innerJoin('users', 'interests.user_id', 'users.id')
                                         .innerJoin('books', 'interests.book_id', 'books.id')
-                                        .innerJoin('interest_books', 'interests.id', 'interest_books.interest_id')
-                                        .innerJoin({traded_books: 'books'}, 'interest_books.book_id', 'traded_books.id')
+                                        .leftJoin('interest_books', 'interests.id', 'interest_books.interest_id')
+                                        .leftJoin({traded_books: 'books'}, 'interest_books.book_id', 'traded_books.id')
     
         return response.ok({ interests })
     }
