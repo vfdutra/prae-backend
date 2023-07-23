@@ -20,41 +20,41 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/showImage/:file', 'FilesController.show')
-
 Route.get('/', async () => {
   return { hello: 'world' }
 })
 
 Route.post('/login', 'SessionsController.store').as('sessions.store')
 
-// Rotas de Livros
-Route.group(() => {
-    Route.get('/all', 'BooksController.findAll')
-    Route.get('/:id', 'BooksController.findOne')
-    Route.post('/', 'BooksController.create')
-    Route.put('/:id', 'BooksController.update')
-    Route.delete('/:id', 'BooksController.destroy')
-}).prefix('books')
-
 // Rotas de Usuários
 Route.group(() => {
-    Route.get('/all', 'UsersController.findAll')
-    Route.get('/:id', 'UsersController.findOne')
+    Route.get('/all', 'UsersController.findAll').middleware(['auth', 'checkTypeUser'])
+    Route.get('/:id', 'UsersController.findOne').middleware(['auth', 'checkTypeUser'])
     Route.post('/', 'UsersController.create')
     Route.put('/:id', 'UsersController.update')
-    Route.delete('/:id', 'UsersController.destroy')
+    Route.delete('/:id', 'UsersController.destroy').middleware(['auth', 'checkTypeUser'])
 }).prefix('users')
 
-// Rotas de Interesses
 Route.group(() => {
-    Route.get('/all', 'InterestsController.findAll')
-    Route.get('/:id', 'InterestsController.findOne')
-    Route.post('/', 'InterestsController.create')    
-    Route.put('/:id', 'InterestsController.update')
-    Route.delete('/:id', 'InterestsController.destroy')
-    Route.get('/user/:id', 'InterestsController.findByUser')
-    Route.get('/book/:id', 'InterestsController.findByBook')
-}).prefix('interests')
+    
+    // Rotas de Livros
+    Route.group(() => {
+        Route.get('/all/:crud?', 'BooksController.findAll')
+        Route.get('/:id', 'BooksController.findOne')
+        Route.post('/', 'BooksController.create')
+        Route.put('/:id', 'BooksController.update')
+        Route.delete('/:id', 'BooksController.destroy')
+    }).prefix('books').middleware('checkTypeUser')
 
-// Route.post('insert', 'CsvsController.import')
+    // Rotas de Interesses
+    Route.group(() => {
+        Route.get('/all', 'InterestsController.findAll')
+        Route.get('/:id', 'InterestsController.findOne')
+        Route.post('/', 'InterestsController.create').middleware('checkTypeUser')
+        Route.put('/:id', 'InterestsController.update')
+        Route.delete('/:id', 'InterestsController.destroy')
+        Route.get('/user/:id', 'InterestsController.findByUser')
+        Route.get('/book/:id', 'InterestsController.findByBook')
+    }).prefix('interests')
+
+}).middleware('auth')

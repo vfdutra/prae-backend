@@ -99,8 +99,18 @@ export default class BooksController {
         return response.ok({book})
     }
     
-    public async findAll ({ response }: HttpContextContract){
-        const books = await Book.all()
-        return response.ok({books})
+    public async findAll ({ response, request }: HttpContextContract){
+        let admin = request.param('crud');
+
+        if(admin == 1){
+            const books = await Book.all()
+            return response.ok({books})
+        } else {
+            const books = await Database
+            .from('books')
+            .select('*')
+            .where('quantity', '>', 0)
+            return response.ok({books})
+        }   
     }
 }
