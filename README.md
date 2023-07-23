@@ -23,3 +23,7 @@ Depois de completar todos esses requisitos, você poderá usar a API. Há um arq
 ## Criando um Usuário Administrador
 
 É possível criar um usuário administrador por meio da API, uma opção que não está disponível na camada do Front-End do projeto. Isso pode ser feito diretamente pela chamada da rota, utilizando `type = 1`, ou criando o usuário pelo Front-End e modificando manualmente o tipo de usuário no banco de dados.
+
+## Implantação
+
+Atualmente, é possível implantar o código usando o Vercel (https://prae-henriquerl55.vercel.app), pois a API ainda está hospedada no Heroku. No entanto, a API será retirada do Heroku até o final de julho devido ao fim do período de utilização gratuita.
