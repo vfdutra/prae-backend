@@ -28,10 +28,10 @@ Route.post('/login', 'SessionsController.store').as('sessions.store')
 
 // Rotas de Usuários
 Route.group(() => {
-    Route.get('/all', 'UsersController.findAll').middleware(['auth'])
-    Route.get('/:id', 'UsersController.findOne').middleware(['auth'])
+    Route.get('/all', 'UsersController.findAll').middleware(['auth', 'checkTypeUser'])
+    Route.get('/:id', 'UsersController.findOne').middleware(['auth', 'checkTypeUser'])
     Route.post('/', 'UsersController.create')
-    Route.put('/:id', 'UsersController.update')
+    Route.put('/:id', 'UsersController.update').middleware(['auth'])
     Route.delete('/:id', 'UsersController.destroy').middleware(['auth', 'checkTypeUser'])
 }).prefix('users')
 
@@ -41,10 +41,10 @@ Route.group(() => {
     Route.group(() => {
         Route.get('/all/:crud?', 'BooksController.findAll')
         Route.get('/:id', 'BooksController.findOne')
-        Route.post('/', 'BooksController.create')
-        Route.put('/:id', 'BooksController.update')
-        Route.delete('/:id', 'BooksController.destroy')
-    }).prefix('books').middleware('checkTypeUser')
+        Route.post('/', 'BooksController.create').middleware('checkTypeUser')
+        Route.put('/:id', 'BooksController.update').middleware('checkTypeUser')
+        Route.delete('/:id', 'BooksController.destroy').middleware('checkTypeUser')
+    }).prefix('books')
 
     // Rotas de Interesses
     Route.group(() => {
