@@ -1,5 +1,3 @@
-Aqui está uma versão revisada da documentação para a API SATIE(PRAE):
-
 # API SATIE(PRAE)
 
 Esta API foi criada usando AdonisJS 5 com TypeScript e usa PostgreSQL como seu banco de dados.
@@ -22,4 +20,6 @@ No repositório, há um arquivo chamado `.env-example` que contém alguns parâm
 
 Depois de completar todos esses requisitos, você poderá usar a API. Há um arquivo anexado chamado `Insomnia.json` que pode ser importado para o software Insomnia para testar APIs. Este arquivo contém todas as rotas fornecidas pela API, juntamente com alguns parâmetros para teste.
 
-Espero que esta versão revisada seja mais clara e concisa! Há algo mais em que eu possa ajudar?
+## Criando um Usuário Administrador
+
+É possível criar um usuário administrador por meio da API, uma opção que não está disponível na camada do Front-End do projeto. Isso pode ser feito diretamente pela chamada da rota, utilizando `type = 1`, ou criando o usuário pelo Front-End e modificando manualmente o tipo de usuário no banco de dados.
