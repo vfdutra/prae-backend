@@ -28,8 +28,8 @@ Route.post('/login', 'SessionsController.store').as('sessions.store')
 
 // Rotas de Usuários
 Route.group(() => {
-    Route.get('/all', 'UsersController.findAll').middleware(['auth', 'checkTypeUser'])
-    Route.get('/:id', 'UsersController.findOne').middleware(['auth', 'checkTypeUser'])
+    Route.get('/all', 'UsersController.findAll').middleware(['auth'])
+    Route.get('/:id', 'UsersController.findOne').middleware(['auth'])
     Route.post('/', 'UsersController.create')
     Route.put('/:id', 'UsersController.update')
     Route.delete('/:id', 'UsersController.destroy').middleware(['auth', 'checkTypeUser'])
