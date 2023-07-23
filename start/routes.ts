@@ -50,7 +50,7 @@ Route.group(() => {
     Route.group(() => {
         Route.get('/all', 'InterestsController.findAll')
         Route.get('/:id', 'InterestsController.findOne')
-        Route.post('/', 'InterestsController.create').middleware('checkTypeUser')
+        Route.post('/', 'InterestsController.create')
         Route.put('/:id', 'InterestsController.update')
         Route.delete('/:id', 'InterestsController.destroy')
         Route.get('/user/:id', 'InterestsController.findByUser')
