@@ -12,6 +12,8 @@ export default class BooksController {
 
     public async create({ response, request }: HttpContextContract) {
         const bookPayload = request.only(['title', 'cover', 'author', 'category', 'quantity']);
+
+        const interest = request.only(['interestId']);        
       
         const imagem = request.file('cover', {
           size: '2mb',
@@ -37,8 +39,17 @@ export default class BooksController {
           category: bookPayload.category,
           quantity: bookPayload.quantity,
         });
+
+        const book = await Book.query().orderBy('id', 'desc').first();
+
+        if(interest.interestId){
+            await Database.insertQuery().table('interest_books').insert({
+                interest_id: interest.interestId,
+                book_id: book?.id,                
+            });
+        }
       
-       return response.created({ Book: await Book.query().orderBy('id', 'desc').first() });
+       return response.created({ book });
     }      
 
     public async update ({ request, response }: HttpContextContract){

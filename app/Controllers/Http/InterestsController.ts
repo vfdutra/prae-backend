@@ -64,13 +64,17 @@ export default class InterestsController {
                                                 'books.author as book_author',
                                                 'books.category as book_category',
                                                 'books.quantity as book_quantity',
-                                                'books.cover')
+                                                'books.cover',
+                                                'traded_books.title as traded_book_title')
                                         .from('interests')
                                         .innerJoin('users', 'interests.user_id', 'users.id')
                                         .innerJoin('books', 'interests.book_id', 'books.id')
-
+                                        .leftJoin('interest_books', 'interests.id', 'interest_books.interest_id')
+                                        .leftJoin({traded_books: 'books'}, 'interest_books.book_id', 'traded_books.id')
+    
         return response.ok({ interests })
     }
+    
 
     public async findOne ({ params, response }: HttpContextContract) {
         const interest = await Interest.findOrFail(params.id)
