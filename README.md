@@ -4,13 +4,8 @@ Esta API foi criada usando AdonisJS 5 com TypeScript e usa PostgreSQL como seu b
 
 ## Começando
 
-### Pelo Google Drive
-
-Para iniciar a API a partir dos arquivos fornecidos na pasta do Google Drive, navegue até o diretório `prae-backend` e execute o comando `node ace serve --watch` no seu terminal. Isso iniciará um servidor local na porta 3333, que pode ser acessado em http://localhost:3333/.
-
-### Pelo GitHub
-
 Para iniciar a API a partir do repositório do GitHub, clone-o para o diretório de sua preferência. Em seguida, execute o comando `npm install` para instalar as dependências do projeto. Depois disso, execute o comando `node ace serve --watch` para iniciar um servidor local na porta de sua preferência (o padrão é 3333).
+http://localhost:3333/.
 
 ## Configurando o Banco de Dados
 
